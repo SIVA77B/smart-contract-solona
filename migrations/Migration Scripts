@@ -1,0 +1,27 @@
+// migrations/1_initial_migration.js
+const Migrations = artifacts.require("Migrations");
+
+module.exports = function (deployer) {
+  deployer.deploy(Migrations);
+};
+
+// migrations/2_deploy_contracts.js
+const TestToken = artifacts.require("TestToken");
+const LendingPlatform = artifacts.require("LendingPlatform");
+
+module.exports = async function (deployer) {
+  // Deploy TestTokens
+  await deployer.deploy(TestToken, "Test USD", "TUSD");
+  const tusd = await TestToken.deployed();
+  
+  await deployer.deploy(TestToken, "Test ETH", "TETH");
+  const teth = await TestToken.deployed();
+  
+  // Deploy LendingPlatform
+  await deployer.deploy(LendingPlatform);
+  const lending = await LendingPlatform.deployed();
+  
+  console.log("TUSD deployed to:", tusd.address);
+  console.log("TETH deployed to:", teth.address);
+  console.log("LendingPlatform deployed to:", lending.address);
+};
